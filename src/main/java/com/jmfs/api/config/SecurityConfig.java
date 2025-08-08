@@ -39,11 +39,11 @@ public class SecurityConfig {
         log.info("[SECURITY] Configuring security filter chain");
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource(http))) // <--- ESSENCIAL
+            .cors(cors -> cors.configurationSource(corsConfigurationSource(http)))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/auth/validate").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         log.info("[SECURITY] Security filter chain configured successfully");

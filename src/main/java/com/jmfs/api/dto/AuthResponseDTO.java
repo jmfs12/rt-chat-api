@@ -1,4 +1,4 @@
 package com.jmfs.api.dto;
 
-public record AuthResponseDTO(String name, String token) {
+public record AuthResponseDTO(Long id, String name, String token) {
 }
