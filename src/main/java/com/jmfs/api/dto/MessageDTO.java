@@ -1,0 +1,16 @@
+package com.jmfs.api.dto;
+
+import java.time.LocalDateTime;
+
+import com.jmfs.api.domain.Message;
+
+public record MessageDTO(String content, Long sender, Long receiver, LocalDateTime timestamp) {
+    public static MessageDTO fromEntity(Message message) {
+        return new MessageDTO(
+            message.getContent(),
+            message.getSender().getId(),
+            message.getReceiver().getId(),
+            message.getTimestamp()
+        );
+    }
+}
