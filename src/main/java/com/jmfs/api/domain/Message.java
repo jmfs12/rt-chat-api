@@ -38,4 +38,11 @@ public class Message {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
+    public Message(String content, LocalDateTime timestamp, User sender, User receiver) {
+        this.content = content;
+        this.timestamp = timestamp;
+        this.sender = sender;
+        this.receiver = receiver;
+    }
+
 }

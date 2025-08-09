@@ -2,8 +2,10 @@ package com.jmfs.api.service.impl;
 
 import java.util.List;
 
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import com.jmfs.api.domain.Message;
 import com.jmfs.api.domain.User;
 import com.jmfs.api.dto.MessageDTO;
 import com.jmfs.api.repositories.MessageRepository;
@@ -21,13 +23,37 @@ public class MessageServiceImpl implements MessageService{
     private final UserRepository userRepository;
     private final MessageRepository messageRepository;
     private final TokenService tokenService;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public MessageDTO sendMessage(MessageDTO messageDTO){
-        log.info("Sending message: {}", messageDTO);
-        // Logic to send the message
-        // This could involve saving the message to the database, notifying users, etc.
-        return messageDTO; // Return the sent message for confirmation
+        log.info("[MESSAGE SERVICE] Sending message: {}", messageDTO);
+        User sender = userRepository.findById(messageDTO.sender())
+            .orElseThrow(() -> new RuntimeException("Sender not found with ID: " + messageDTO.sender()));
+        User receiver = userRepository.findById(messageDTO.receiver())
+            .orElseThrow(() -> new RuntimeException("Receiver not found with ID: " + messageDTO.receiver()));
+
+        Message message = new Message(
+            messageDTO.content(),
+            messageDTO.timestamp() != null ? messageDTO.timestamp() : java.time.LocalDateTime.now(),
+            sender,
+            receiver
+        );
+
+        boolean saved = messageRepository.save(message) != null;
+
+        if (saved){
+            log.info("[MESSAGE SERVICE] Message sent successfully from {} to {}", sender.getUsername(), receiver.getUsername());
+            messagingTemplate.convertAndSendToUser(
+                receiver.getUsername(),
+                "/queue/messages",
+                messageDTO
+            );
+        } else {
+            return null;
+        }
+
+        return messageDTO;
     }
 
     @Override
@@ -46,7 +72,7 @@ public class MessageServiceImpl implements MessageService{
             .stream()
             .map(MessageDTO::fromEntity)
             .toList();
-        log.info("Retrieved {} messages for user: {}", messages.size(), user);
+        log.info("[MESSAGE SERVICE] Retrieved {} messages for user: {}", messages.size(), user);
         return messages;
     }
 }
