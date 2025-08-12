@@ -9,6 +9,13 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final AuthHandshakeInterceptor authHandshakeInterceptor;
+
+    public WebSocketConfig(AuthHandshakeInterceptor authHandshakeInterceptor) {
+        this.authHandshakeInterceptor = authHandshakeInterceptor;
+    }
+
     @Override
     public void configureMessageBroker(MessageBrokerRegistry config) {
         config.enableSimpleBroker("/topics", "/queue");
@@ -18,6 +25,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").setAllowedOriginPatterns("*").withSockJS();
+        registry.addEndpoint("/ws").setHandshakeHandler(new CustomPrincipalHandshakeHandler()).addInterceptors(authHandshakeInterceptor).setAllowedOriginPatterns("*").withSockJS();
     }
+
 }

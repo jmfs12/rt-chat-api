@@ -39,7 +39,7 @@ public class MessageServiceImpl implements MessageService{
             sender,
             receiver
         );
-
+        
         boolean saved = messageRepository.save(message) != null;
 
         if (saved){
