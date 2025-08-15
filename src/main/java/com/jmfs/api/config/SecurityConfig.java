@@ -2,6 +2,8 @@ package com.jmfs.api.config;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -27,7 +29,11 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @EnableWebSecurity
 @Slf4j
+@SecurityScheme(name = SecurityConfig.AUTHENTICATION_SCHEME,
+        type = SecuritySchemeType.HTTP, bearerFormat = "JWT", scheme = "bearer")
 public class SecurityConfig {
+    public static final String AUTHENTICATION_SCHEME = "bearerAuth";
+
     @Autowired
     private SecurityFilter securityFilter;
 
@@ -45,6 +51,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/auth/validate").permitAll()
                 .requestMatchers(HttpMethod.GET, "/ws/**").permitAll()
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "swagger-ui.html").permitAll()
                 .anyRequest().authenticated())
             .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         log.info("[SECURITY] Security filter chain configured successfully");
