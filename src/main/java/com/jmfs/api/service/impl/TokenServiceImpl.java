@@ -27,7 +27,6 @@ public class TokenServiceImpl implements TokenService{
     public String generateToken(User user){
         try{            
             log.info("[TOKEN SERVICE] Generating token for user: {}", user.getUsername());
-            // Implement token generation logic here (e.g., using JWT
             Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
     
             String token = JWT.create()
@@ -64,7 +63,6 @@ public class TokenServiceImpl implements TokenService{
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT jwt = verifier.verify(token);
 
-        // Supondo que o ID foi incluído como claim "id"
         return jwt.getClaim("id").asLong();
     }
 

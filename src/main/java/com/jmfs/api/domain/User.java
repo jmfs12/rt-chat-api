@@ -2,6 +2,7 @@ package com.jmfs.api.domain;
 
 import java.util.List;
 
+import com.jmfs.api.dto.UserDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -36,4 +37,9 @@ public class User {
 
     @OneToMany(mappedBy = "receiver")
     private List<Message> receivedMessages;
+
+    public User(UserDTO userDTO) {
+        this.email = userDTO.email();
+        this.username = userDTO.username();
+    }
 }

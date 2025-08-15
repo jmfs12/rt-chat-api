@@ -34,8 +34,7 @@ public class MessageServiceImpl implements MessageService{
             .orElseThrow(() -> new RuntimeException("Receiver not found with ID: " + messageDTO.receiver()));
 
         Message message = new Message(
-            messageDTO.content(),
-            messageDTO.timestamp() != null ? messageDTO.timestamp() : java.time.LocalDateTime.now(),
+            messageDTO,
             sender,
             receiver
         );

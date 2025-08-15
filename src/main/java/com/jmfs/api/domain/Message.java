@@ -2,6 +2,7 @@ package com.jmfs.api.domain;
 
 import java.time.LocalDateTime;
 
+import com.jmfs.api.dto.MessageDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,11 +39,12 @@ public class Message {
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
 
-    public Message(String content, LocalDateTime timestamp, User sender, User receiver) {
-        this.content = content;
-        this.timestamp = timestamp;
+    public Message(MessageDTO messageDTO, User sender, User receiver) {
+        this.content = messageDTO.content();
+        this.timestamp = messageDTO.timestamp();
         this.sender = sender;
         this.receiver = receiver;
+
     }
 
 }
