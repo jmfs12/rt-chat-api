@@ -5,9 +5,12 @@
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
-This project is an API built in **Java, Java Springboot, PostgreSQL as database, Swagger for documentation, Spring Security & JWT for authentication control, and Websocket for real-time communication**
+This project is an API built in **Java, Java Springboot, PostgreSQL as database, 
+Swagger for documentation, Spring Security & JWT for authentication control, and 
+Websocket for real-time communication**
 
-This API was developed for a Fullstack project, integrated in this React Project [RT-Chat Frontend](https://github.com/jmfs12/rt-chat-web)
+This API was developed for a Fullstack project, 
+integrated in this React Project [RT-Chat Frontend](https://github.com/jmfs12/rt-chat-web)
 
 ## Table of contents
 

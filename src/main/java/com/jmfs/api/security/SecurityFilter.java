@@ -41,6 +41,12 @@ public class SecurityFilter extends OncePerRequestFilter{
             return;
         }
 
+        if(path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs")){
+            log.info("[SECURITY FILTER] Public endpoint accessed: {}", path);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         log.info("[SECURITY FILTER] Secured endpoint accessed: {}", path);
         var token = recoverToken(request);
         var login = tokenService.validateToken(token);
